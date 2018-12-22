@@ -1,0 +1,27 @@
+name: JobsDesk
+author: TiveCS
+version: 1.0
+main: team.creativecode.jobsdesk.Main
+description: Do not let your player unemployed
+depend: [Vault]
+commands:
+    jobsdeskadmin:
+        aliases: [jda, jobdeskadmin, jobadmin, jobsadmin, jdadmin]
+        description: Main command for admin
+        permission: jobsdesk.admin.command
+    jobsdesk:
+        aliases: [jobs, job, jobdesk]
+        description: Main command for JobsDesk
+        permission: jobsdesk.player.command
+permissions:
+    jobsdesk.admin:
+        description: Admin basic permission
+        default: op
+        children:
+            jobsdesk.player: true
+            jobsdesk.admin.command: true
+    jobsdesk.player:
+        description: Player basic permissions
+        default: true
+        children:
+            jobsdesk.player.command: true
