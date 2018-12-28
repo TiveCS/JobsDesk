@@ -8,12 +8,15 @@ import net.milkbowl.vault.economy.Economy;
 import team.creativecode.jobsdesk.cmds.JobsDeskAdminCmd;
 import team.creativecode.jobsdesk.cmds.JobsDeskCmd;
 import team.creativecode.jobsdesk.events.BasicEvent;
+import team.creativecode.jobsdesk.manager.JobsCreate;
 
 public class Main extends JavaPlugin {
 	
 	public static Economy economy = null;
 	
 	public void onEnable() {
+		
+		loadConfig();
 		
 		if (!setupEconomy()) {
 			System.out.println("[JobsDesk] Failed to hook with Vault");
@@ -24,6 +27,13 @@ public class Main extends JavaPlugin {
 		
 		loadCmds();
 		loadEvents();
+	}
+	
+	public void loadConfig() {
+		getConfig().options().copyDefaults(true);
+		saveConfig();
+		
+		ConfigManager.createFile(JobsCreate.file);
 	}
 	
 	public void loadEvents() {

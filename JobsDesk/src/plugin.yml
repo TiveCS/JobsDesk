@@ -3,7 +3,7 @@ author: TiveCS
 version: 1.0
 main: team.creativecode.jobsdesk.Main
 description: Do not let your player unemployed
-depend: [Vault]
+softdepend: [Vault]
 commands:
     jobsdeskadmin:
         aliases: [jda, jobdeskadmin, jobadmin, jobsadmin, jdadmin]

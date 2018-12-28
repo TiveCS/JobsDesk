@@ -24,10 +24,8 @@ public class MainMenu extends MenuManager {
 
 	@Override
 	public void updateMenu(int page) {
-		if (page != this.getPage()) {
-			Inventory inv = Bukkit.createInventory(null, 3*9, ChatColor.translateAlternateColorCodes('&', "&1Main Menu"));
-			loadMenu(page, inv);
-		}
+		Inventory inv = Bukkit.createInventory(null, 3*9, ChatColor.translateAlternateColorCodes('&', "&1Main Menu"));
+		loadMenu(page, inv);
 		
 		ItemStack border = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15);
 		ItemMeta bordermeta = border.getItemMeta();
@@ -93,7 +91,6 @@ public class MainMenu extends MenuManager {
 
 	@Override
 	public void closeMenu() {
-		
 	}
 
 }

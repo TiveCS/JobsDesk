@@ -32,6 +32,7 @@ public abstract class MenuManager {
 	}
 	
 	public void openMenu() {
+		this.updateMenu(this.page);
 		this.user.openInventory(this.menu);
 	}
 	
