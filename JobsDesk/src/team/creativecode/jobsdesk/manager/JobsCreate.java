@@ -13,9 +13,11 @@ import org.bukkit.inventory.ItemStack;
 
 import team.creativecode.jobsdesk.ConfigManager;
 import team.creativecode.jobsdesk.Main;
+import team.creativecode.jobsdesk.enums.JobsCreateEnum.JobsReward;
 import team.creativecode.jobsdesk.enums.JobsCreateEnum.Objective;
 import team.creativecode.jobsdesk.enums.JobsCreateEnum.ObjectiveData;
 import team.creativecode.jobsdesk.enums.JobsCreateEnum.ObjectiveType;
+import team.creativecode.jobsdesk.enums.JobsCreateEnum.PhaseDefaultAttribute;
 import team.creativecode.jobsdesk.util.MsgManager;
 
 public class JobsCreate {
@@ -62,7 +64,7 @@ public class JobsCreate {
 	 * 			Permission: 
 	 * 				- permission.reward.1
 	 * 				- permission.reward.2
-	 * 			Item: 
+	 * 			Items: 
 	 * 				1:<ItemStack 1>
 	 * 				2:<ItemStack 2>
 
@@ -142,7 +144,9 @@ public class JobsCreate {
 			size = config.getConfigurationSection(this.jobsname + ".Phases").getKeys(false).size();
 		}catch(Exception e) {}
 		
-		ConfigManager.input(file, this.jobsname + ".Phases." + (size + 1) + ".enable", false);
+		for (PhaseDefaultAttribute at : PhaseDefaultAttribute.values()) {
+			ConfigManager.input(file, this.jobsname + ".Phases." + (size + 1) + "." + at.toString().toLowerCase(), at.getValue());
+		}
 	}
 	
 	//------------------------------------------------------------------------
@@ -153,7 +157,7 @@ public class JobsCreate {
 	}
 	
 	public void deleteRewardPermission(int index) {
-		List<String> list = new ArrayList<String>(config.getStringList(this.jobsname + ".Rewards.Permissions"));
+		List<String> list = new ArrayList<String>(config.getStringList(this.jobsname + ".Rewards.Permission"));
 		if (!list.get(index - 1).isEmpty()) {
 			list.remove(index - 1);
 		}
@@ -166,9 +170,9 @@ public class JobsCreate {
 	}
 	
 	public void addRewardPermission(String perm) {
-		List<String> list = new ArrayList<String>(config.getStringList(this.jobsname + ".Rewards.Permissions"));
+		List<String> list = new ArrayList<String>(config.getStringList(this.jobsname + ".Rewards.Permission"));
 		list.add(perm);
-		ConfigManager.input(file, this.jobsname + ".Rewards.Permissions", list);
+		ConfigManager.input(file, this.jobsname + ".Rewards.Permission", list);
 	}
 	
 	public void setRewardItem(ItemStack item, int index) {
@@ -180,7 +184,7 @@ public class JobsCreate {
 	}
 	
 	public void setRewardPermission(List<String> value) {
-		ConfigManager.input(file, this.jobsname + ".Rewards.Permissions", value);
+		ConfigManager.input(file, this.jobsname + ".Rewards.Permission", value);
 	}
 	
 	public void setRewardLevel(int value) {
@@ -207,17 +211,23 @@ public class JobsCreate {
 	}
 	
 	public void setRequiredPermission(List<String> permissions) {
-		ConfigManager.input(file, this.jobsname + ".Requirement.Permissions", permissions);
+		ConfigManager.input(file, this.jobsname + ".Requirement.Permission", permissions);
+	}
+	
+	public void addRequiredJobs(String lit) {
+		List<String> list = config.getStringList(this.jobsname + ".Requirement.Jobs");
+		list.add(lit);
+		setRequiredJobs(list);
 	}
 	
 	public void addRequiredPermission(String permission) {
-		List<String> list = config.getStringList(this.jobsname + ".Requirement.Permissions");
+		List<String> list = config.getStringList(this.jobsname + ".Requirement.Permission");
 		list.add(permission);
 		setRequiredPermission(list);
 	}
 	
 	public void deleteRequiredPermission(int index) {
-		List<String> list = config.getStringList(this.jobsname + ".Requirement.Permissions");
+		List<String> list = config.getStringList(this.jobsname + ".Requirement.Permission");
 		if (!list.get(index).isEmpty()) {
 			list.remove(index);
 		}
@@ -246,8 +256,25 @@ public class JobsCreate {
 	//------------------------------------------------------------------------
 	// getter
 	
-	public Player getCreator() {
-		return this.creator;
+	public List<String> getRewardList(JobsReward reward){
+		List<String> list = new ArrayList<String>();
+		String name = reward.toString().substring(0, 1) + reward.toString().toLowerCase().substring(1);
+		if (ConfigManager.contains(file, this.jobsname + ".Rewards." + name)) {
+			list = config.getStringList(this.jobsname + ".Rewards." + name);
+		}
+		return list;
+	}
+	
+	public Number getRewardNumber(JobsReward reward) {
+		String name = reward.toString().substring(0, 1) + reward.toString().toLowerCase().substring(1);
+		if (ConfigManager.contains(file, this.jobsname + ".Rewards." + name)) {
+			try {
+				return (Number) config.get(this.jobsname + ".Rewards." + name);
+			}catch(Exception e) {
+				return 0;
+			}
+		}
+		return 0;
 	}
 	
 	public int getPhaseSize() {
@@ -260,10 +287,18 @@ public class JobsCreate {
 	
 	public int getObjectiveSize(int phasenumber) {
 		if (ConfigManager.contains(file, this.jobsname + ".Phases." + phasenumber)) {
-			return config.getConfigurationSection(this.jobsname + ".Phases." + phasenumber).getKeys(false).size();
+			List<String> l = new ArrayList<String>(config.getConfigurationSection(this.jobsname + ".Phases." + phasenumber).getKeys(false));
+			for (PhaseDefaultAttribute at : PhaseDefaultAttribute.values()) {
+				l.remove(at.toString().toLowerCase());
+			}
+			return l.size();
 		}else {
 			return 0;
 		}
+	}
+	
+	public Player getCreator() {
+		return this.creator;
 	}
 	
 	public String getRepeatCooldownRaw() {
@@ -273,5 +308,6 @@ public class JobsCreate {
 	public String getJobsName() {
 		return this.jobsname;
 	}
+
 }
 

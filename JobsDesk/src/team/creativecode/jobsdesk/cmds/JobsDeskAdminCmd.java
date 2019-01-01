@@ -26,6 +26,7 @@ public class JobsDeskAdminCmd implements CommandExecutor {
 						jc.setCreator((Player) sender);
 						jc.register();
 						jc.addObjective(1, 1, ObjectiveType.ITEM, Objective.DELIVER, null);
+						
 						mm.openMenu();
 						return true;
 					}

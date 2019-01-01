@@ -15,7 +15,7 @@ import team.creativecode.jobsdesk.menu.MenuManager;
 import team.creativecode.jobsdesk.util.ItemManager;
 
 public class MainMenu extends MenuManager {
-
+	
 	public MainMenu(Player p, MenuCategory category, int page) {
 		super(p, category, page);
 		Inventory inv = Bukkit.createInventory(null, 3*9, ChatColor.translateAlternateColorCodes('&', "&1Main Menu"));
@@ -24,8 +24,10 @@ public class MainMenu extends MenuManager {
 
 	@Override
 	public void updateMenu(int page) {
-		Inventory inv = Bukkit.createInventory(null, 3*9, ChatColor.translateAlternateColorCodes('&', "&1Main Menu"));
-		loadMenu(page, inv);
+		if (page != this.getPage()) {
+			Inventory inv = Bukkit.createInventory(null, 3*9, ChatColor.translateAlternateColorCodes('&', "&1Main Menu"));
+			loadMenu(page, inv);
+		}
 		
 		ItemStack border = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15);
 		ItemMeta bordermeta = border.getItemMeta();
@@ -87,10 +89,6 @@ public class MainMenu extends MenuManager {
 	public void loadMenu(int page, Inventory menu) {
 		updateMenu(page);
 		this.setMenu(menu);
-	}
-
-	@Override
-	public void closeMenu() {
 	}
 
 }

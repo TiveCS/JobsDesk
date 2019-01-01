@@ -30,10 +30,5 @@ public class JobsListMenu extends MenuManager {
 		
 	}
 
-	@Override
-	public void closeMenu() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }
